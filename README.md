@@ -1,1 +1,2 @@
 # Projeto-Integrador
+Projeto realizado na faculdade para criar um programa de cálculo de preço de venda e controle de estoque, onde é possível inserir, alterar, deletar e listar produtos em um banco de dados mysql. 
