@@ -1,10 +1,10 @@
 import mysql.connector
 
 mydb = mysql.connector.connect(
-host = "", 
-user = "",
-password ="",
-database ="" 
+host = "127.0.0.1", 
+user = "root",
+password ="gabiru04",
+database ="pj" 
 )
 mycursor = mydb.cursor()
 
@@ -113,45 +113,101 @@ def alterar():
                 'Alterar custo fixo', \
                 'Alterar comissão de vendas', \
                 'Alterar imposto sobre venda', \
-                'Alterar margem de lucro',]
-  cod = -1
-  while cod < 0:
-    cod = int(input("Digite o código do produto que deseja alterar: "))
-    escolha = int(opcaoEscolhida(menu_alterar))
-    if escolha == 1:
-      inserir_alteração(cod, "UPDATE produto SET cod = %s WHERE cod = %s", "Digite o novo código do produto: ")
-    if escolha == 2:
-      inserir_alteração(cod, "UPDATE produto SET nome = %s WHERE cod = %s", "Digite o novo nome do produto: ")
-    if escolha == 3:
-      inserir_alteração(cod, "UPDATE produto SET descricao = %s WHERE cod = %s", "Digite a nova descrição do produto: ") 
-    if escolha == 4:
-      inserir_alteração(cod, "UPDATE produto SET cp = %s WHERE cod = %s", "Digite o novo custo do produto: ") 
-    if escolha == 5:
-      inserir_alteração(cod, "UPDATE produto SET cf = %s WHERE cod = %s", "Digite o novo custo fixo do produto: ") 
-    if escolha == 6:
-      inserir_alteração(cod, "UPDATE produto SET cv = %s WHERE cod = %s", "Digite a nova comissão de vendas do produto: ") 
-    if escolha == 7:
-      inserir_alteração(cod, "UPDATE produto SET iv = %s WHERE cod = %s", "Digite o novo imposto sobre vendas do produto: ") 
-    if escolha == 8:
-      inserir_alteração(cod, "UPDATE produto SET ml = %s WHERE cod = %s", "Digite a nova margem de lucro do produto: ") 
+                'Alterar margem de lucro', \
+                'Voltar']
+  try:
+      cod = int(input("Digite o código do produto que deseja alterar: ")) 
+      consulta_sql = "SELECT * FROM produto WHERE cod = %s"
+      mycursor.execute(consulta_sql, (cod,))
+      produto = mycursor.fetchone()
+      if produto is None:
+        print("Produto não encontrado")
+        return
+      else:
+        while True:
+          escolha = int(opcaoEscolhida(menu_alterar)) 
+          if escolha == 1:
+            new_cod = int(input("Digite o novo código do produto: ")) 
+            query = "UPDATE produto SET cod = %s WHERE cod = %s"
+            values = (new_cod, cod)
+            mycursor.execute(query, values)
+            mydb.commit()
+            print("Alterado com sucesso!")
+          if escolha == 2:
+            new_nome = input("Digite o novo nome do produto: ")
+            query = "UPDATE produto SET nome = %s WHERE cod = %s"
+            values = (new_nome, cod)
+            mycursor.execute(query, values)
+            mydb.commit()
+            print("Alterado com sucesso!")
+          if escolha == 3:
+            new_desc = input("Digite a nova descrição do produto: ")
+            query = "UPDATE produto SET descricao = %s WHERE cod = %s"
+            values = (new_desc, cod)
+            mycursor.execute(query, values)
+            mydb.commit()
+            print("Alterado com sucesso!")
+          if escolha == 4:
+            new_cp = float(input("Digite o novo custo do produto: "))
+            query = "UPDATE produto SET cp = %s WHERE cod = %s"
+            values = (new_cp, cod)
+            mycursor.execute(query, values)
+            mydb.commit()
+            print("Alterado com sucesso!")
+          if escolha == 5:
+            new_cf = int(input("Digite o novo custo fixo do produto: "))
+            query = "UPDATE produto SET cf = %s WHERE cod = %s"
+            values = (new_cf, cod)
+            mycursor.execute(query, values)
+            mydb.commit()
+            print("Alterado com sucesso!") 
+          if escolha == 6:
+            new_cv = int(input("Digite a nova comissão de vendas do produto: "))
+            query = "UPDATE produto SET cv = %s WHERE cod = %s"
+            values = (new_cv, cod)
+            mycursor.execute(query, values)
+            mydb.commit()
+            print("Alterado com sucesso!")     
+          if escolha == 7:
+            new_iv = int(input("Digite o novo imposto sobre venda do produto: "))
+            query = "UPDATE produto SET iv = %s WHERE cod = %s"
+            values = (new_iv, cod)
+            mycursor.execute(query, values)
+            mydb.commit()
+            print("Alterado com sucesso!") 
+          if escolha == 8:
+            new_ml = int(input("Digite a nova margem de lucro do produto: "))
+            query = "UPDATE produto SET ml = %s WHERE cod = %s"
+            values = (new_ml, cod)
+            mycursor.execute(query, values)
+            mydb.commit()
+            print("Alterado com sucesso!") 
+          if escolha == 9:
+            return
+  except ValueError:
+    print("Digite somente números")  
+
   
-def inserir_alteração(cod, item_query, txt_input): # executa alteração
-  user_change = int(input(txt_input))
-  query = item_query
-  values = (user_change, cod)
-  mycursor.execute(query, values)
-  mydb.commit()
-  print("Alterado com sucesso!")  
 
 def excluir():
-  cod = -1
-  while cod < 0:
-    cod = int(input("Digite o código do produto que deseja excluir: "))
-    query = "DELETE from produto WHERE cod = %s"
-    values = cod 
-    mycursor.execute(query, (values,))
-    mydb.commit()
-    print("Deletado com sucesso!")
+  try:
+    cod = -1
+    while cod < 0:
+      cod = int(input("Digite o código do produto que deseja excluir: ")) 
+      consulta_sql = "SELECT * FROM produto WHERE cod = %s"
+      mycursor.execute(consulta_sql, (cod,))
+      produto = mycursor.fetchone()
+      if produto is None:
+        print("Produto não encontrado")
+        return
+      else:
+        query = "DELETE from produto WHERE cod = %s"
+        values = cod 
+        mycursor.execute(query, (values,))
+        mydb.commit()
+        print("Deletado com sucesso!")
+  except ValueError:
+    print("Digite somente números!")
     
           
 
